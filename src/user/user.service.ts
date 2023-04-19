@@ -1,10 +1,10 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { User } from "./interfaces/user.interface";
-import { ObjectId } from "mongodb";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User } from './interfaces/user.interface';
+import { ObjectId } from 'mongodb';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -32,7 +32,13 @@ export class UserService {
       .exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string): Promise<string> {
+    const deletedUser = await this.userModel.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      throw new NotFoundException(`User with ID ${id} does not exist`);
+    }
+
+    return `User with ID ${id} has been removed successfully`;
   }
 }
