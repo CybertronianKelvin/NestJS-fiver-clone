@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGigDto } from './dto/create-gig.dto';
 import { UpdateGigDto } from './dto/update-gig.dto';
 import { Model } from 'mongoose';
@@ -63,11 +63,19 @@ export class GigsService {
     return result[0];
   }
 
-  update(id: number, updateGigDto: UpdateGigDto) {
-    return `This action updates a #${id} gig`;
+  async update(id: string,  updateGigDto: UpdateGigDto): Promise<Gig> {
+    return await this.gigModel
+    .findByIdAndUpdate(id, updateGigDto, { new: true })
+    .exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} gig`;
+  async remove(id: string): Promise<string> {
+    const deletedUser = await this.gigModel.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      throw new NotFoundException(`User with ID ${id} does not exist`);
+    }
+
+    return `User with ID ${id} has been removed successfully`;
   }
 }

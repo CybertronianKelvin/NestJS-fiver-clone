@@ -24,11 +24,11 @@ export class GigsController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateGigDto: UpdateGigDto) {
-    return this.gigsService.update(+id, updateGigDto);
+    return this.gigsService.update(id, updateGigDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.gigsService.remove(+id);
+    return this.gigsService.remove(id);
   }
 }
