@@ -47,7 +47,7 @@ export class GigsService {
   }
 
   async findAll() {
-    const gigs = await this.gigModel.find().exec();
+    const gigs = await this.gigModel.find({}, { __v: 0 }).exec();
     return gigs
   }
 
