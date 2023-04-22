@@ -1,20 +1,17 @@
 import { Test } from '@nestjs/testing';
-import { UserService } from '../user/user.service';
+import { GigsService } from '../gigs/gigs.service';
 import { AppModule } from '../app.module';
 
 // seeders/seed-users.ts
-const users = [
+const gigs = [
   {
-    username: 'user1',
-    email: 'user1@example.com',
-    password: 'password1',
-    role: 'user',
-  },
-  {
-    username: 'user2',
-    email: 'user2@example.com',
-    password: 'password2',
-    role: 'user',
+    title: 'Micheal J',
+    description: 'Lorem ipsum dolor',
+    category: 'gig',
+    sellerId: '644044af39e360a2ddd3ab61',
+    price: 5.40,
+    status: 'Active',
+    tags: ['htmls', 'uk'],
   },
 ];
 
@@ -28,14 +25,14 @@ const users = [
     const app = moduleRef.createNestApplication();
     await app.init();
 
-    const userService = app.get(UserService);
+    const gigsService = app.get(GigsService);
 
     // Seed the user data using the UserService
-    for (const user of users) {
-      await userService.create(user);
+    for (const gig of gigs) {
+      await gigsService.create(gig);
     }
 
-    console.log('User data seeded successfully');
+    console.log('Gigs data seeded successfully');
     await app.close();
   } catch (error) {
     console.error('Error seeding user data:', error);

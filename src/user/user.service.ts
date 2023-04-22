@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './interfaces/user.interface';
@@ -15,17 +15,18 @@ export class UserService {
     return await newUser.save();
   }
 
-  async findAll(): Promise<CreateUserDto[]> {
+  async findAll(): Promise<Omit<CreateUserDto, 'password'>[]> {
     const users = await this.userModel.find().exec();
     return users.map((user) => {
-      const { username, email, password, role, createdAt, updatedAt } = user;
-      return { username, email, password, role, createdAt, updatedAt };
+      const { username, email, role, createdAt, updatedAt } = user;
+      return { username, email, role, createdAt, updatedAt };
     });
   }
 
   async findOne(id: string) {
     return await this.userModel.findById(new ObjectId(id)).exec();
   }
+  
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     return await this.userModel
       .findByIdAndUpdate(id, updateUserDto, { new: true })
