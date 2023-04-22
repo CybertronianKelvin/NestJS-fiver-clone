@@ -2,13 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './interfaces/user.interface';
+import { Gig } from '../gigs/interfaces/gig.interface';
 import { ObjectId } from 'mongodb';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private userModel: Model<User>) {}
+  constructor(
+    @InjectModel('User') private userModel: Model<User>,
+    @InjectModel('Gig') private gigModel: Model<Gig>) {}
 
   async create(user: CreateUserDto): Promise<CreateUserDto> {
     const newUser = new this.userModel(user);
@@ -26,7 +29,11 @@ export class UserService {
   async findOne(id: string) {
     return await this.userModel.findById(new ObjectId(id)).exec();
   }
-  
+
+  async  findAllUserGigs(userId: string): Promise<Gig[]> {
+    return this.gigModel.find({ sellerId: userId }, { __v: 0 }).exec();
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     return await this.userModel
       .findByIdAndUpdate(id, updateUserDto, { new: true })
