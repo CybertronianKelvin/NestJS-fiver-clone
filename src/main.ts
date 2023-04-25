@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-
+  app.setGlobalPrefix('api');
   const config = new DocumentBuilder()
     .setTitle('Fiverr Clone API')
     .setDescription('Possible endpoints for Fiverr Clone')
