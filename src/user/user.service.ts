@@ -11,7 +11,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserService {
   constructor(
     @InjectModel('User') private userModel: Model<User>,
-    @InjectModel('Gig') private gigModel: Model<Gig>) {}
+    @InjectModel('Gig') private gigModel: Model<Gig>,
+  ) {}
 
   async create(user: CreateUserDto): Promise<CreateUserDto> {
     const newUser = new this.userModel(user);
@@ -30,7 +31,7 @@ export class UserService {
     return await this.userModel.findById(new ObjectId(id)).exec();
   }
 
-  async  findAllUserGigs(userId: string): Promise<Gig[]> {
+  async findAllUserGigs(userId: string): Promise<Gig[]> {
     return this.gigModel.find({ sellerId: userId }, { __v: 0 }).exec();
   }
 
