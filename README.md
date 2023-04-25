@@ -14,6 +14,9 @@ $ yarn install
 # development
 $ yarn run start
 
+API Url: http://localhost:3000/
+Docs Url: http://localhost:3000/api/
+
 # watch mode
 $ yarn run start:dev
 
